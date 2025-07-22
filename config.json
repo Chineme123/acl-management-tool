@@ -1,0 +1,17 @@
+[
+    {
+        "path": "C:\\test_acl\\test1.txt",
+        "user": "testuser",
+        "perm": "R"
+    },
+    {
+        "path": "C:\\test_acl\\test2.txt",
+        "user": "testuser",
+        "perm": "W"
+    },
+    {
+        "path": "C:\\test_acl\\test3.txt",
+        "user": "testuser",
+        "perm": "X"
+    }
+]
