@@ -1,108 +1,187 @@
-ECL2 - Windows ACL Management CLI Tool
-ECL2 (Enhanced Control List CLI Tool) is a Python-based command-line utility designed to manage access control permissions on Windows systems. Built for cybersecurity enthusiasts and professionals, ECL2 helps automate the process of granting or revoking file and folder access rights using Windows ACLs.
+# Windows ACL Management CLI Tool
 
-🔐 About
-Access control is a cornerstone of cybersecurity. ECL2 provides a lightweight and powerful way to enforce file-level security by controlling user and group access on Windows NTFS systems.
+This is a Python-based command-line utility for managing access control permissions on Windows systems.
 
-Whether you're a system administrator, cybersecurity student, or Python developer exploring OS-level automation, ECL2 gives you a hands-on tool to manage permissions directly from your terminal.
+Built with cybersecurity principles in mind, it enables users to automate the process of granting and revoking access to files and folders via Windows ACLs — all through a simple CLI interface powered by [Typer](https://typer.tiangolo.com/).
 
-⚙️ Features
-✅ Grant or revoke access to specific users or groups
+---
 
-📁 Batch permission management for multiple targets
+## 🔐 About
 
-🧾 Auto-generated log files for every command run
+Access control is one of the most critical pillars of cybersecurity. With this project, you can:
 
-🖥️ Pure Windows-compatible — built using native Windows ACL support
+- Enforce the principle of least privilege 🔒  
+- Log every permission change for traceability 📜  
+- Batch update permissions for multiple users 👥  
+- Persist access control records in MongoDB 🧩  
 
-🐍 Lightweight CLI built with Python
+Whether you're a security engineer, sysadmin, or Python learner, this tool brings Windows ACL automation into your terminal.
 
-🛡️ Designed with cybersecurity automation in mind
+---
 
-🛠️ Installation
-Make sure you have Python 3.8+ installed on your Windows machine.
+## ⚙️ Features
 
-bash
-Copy
-Edit
-git clone https://github.com/yourusername/ecl2.git
-cd ecl2
-(Replace yourusername with your actual GitHub handle.)
+- ✅ Grant or revoke file/folder permissions for users  
+- 📁 Batch processing of access control for multiple entries (JSON/CSV)  
+- 🧾 Automatic logging of every command and change  
+- 🧠 Access control data is stored and updated in a MongoDB database  
+- 👁️ View current access control list (ACL) of a resource  
+- 🐍 Clean and modern CLI interface using [Typer](https://typer.tiangolo.com/)  
+- 🖥️ Fully Windows-compatible (NTFS access control)  
+- 🔐 Inspired by cybersecurity best practices  
 
-🚀 Usage
-The CLI tool is run using the following pattern:
+---
 
-bash
-Copy
-Edit
-python ecl2.py <command> [options]
-📌 Commands
-grant
-Grants access permissions to a user or group.
+## 📦 Installation
 
-bash
-Copy
-Edit
-python ecl2.py grant <path_to_file_or_folder> <username> <permission_type>
-Example:
+> Requires **Python 3.8+** and **Windows OS**
 
-bash
-Copy
-Edit
-python ecl2.py grant "C:\SensitiveData" Alice FullControl
-remove
-Removes access permissions from a user or group.
+Clone the repository:
 
-bash
-Copy
-Edit
-python ecl2.py remove <path_to_file_or_folder> <username>
-Example:
+```bash
+git clone https://github.com/Chineme123/acl-management-tool.git
+cd acl-management-tool
+```
 
-bash
-Copy
-Edit
-python ecl2.py remove "C:\SensitiveData" Alice
-batch
-Batch grants or revokes access from multiple users.
+Install dependencies:
 
-bash
-Copy
-Edit
-python ecl2.py batch grant <path> users.txt
-python ecl2.py batch remove <path> users.txt
-Where users.txt is a file with usernames listed line by line.
+```bash
+pip install -r requirements.txt
+```
 
-📝 Logging
-Every command execution is automatically logged.
+---
 
-Logs are stored in a dedicated folder in the current user’s directory:
+## 🚀 Usage
 
-makefile
-Copy
-Edit
-C:\Users\<YourUsername>\ECL2Logs
-Each log file contains timestamps, commands run, and the result of the operation.
+Run the tool using:
 
-This ensures auditability and helps track changes made to system permissions — a critical part of access control in cybersecurity environments.
+```bash
+python acl_tool.py <command> [arguments]
+```
 
-🧠 Why This Matters (Cybersecurity Context)
-Access control is one of the core principles of cybersecurity. Unauthorized access to sensitive files is one of the most common vectors for data breaches and internal threats.
+---
 
-ECL2 helps enforce the principle of least privilege by making it easy to control who can access what. This tool is also a great example of how Python — a go-to language in cybersecurity — can be used to build security automation tools that integrate with operating systems.
+## 📌 Available Commands
 
-Whether used to automate administrative tasks or to support red/blue team activities, ECL2 is a practical application of Python for system hardening and security policy enforcement.
+### `grant`
 
-📚 Prerequisites
-Python 3.8 or later
+Grant permission to a user on a file or folder.
 
-Windows OS (with NTFS file system)
+```bash
+python acl_tool.py grant "<path_to_file_or_folder>" <username> <permission_type>
+```
 
-Administrator privileges (for certain access changes)
+**Example:**
 
-👩‍💻 Author
-Chineme
-Cybersecurity & Python enthusiast
-GitHub Profile
+```bash
+python acl_tool.py grant "C:\SensitiveData" Alice FullControl
+```
 
+---
 
+### `remove`
+
+Revoke permission from a user.
+
+```bash
+python acl_tool.py remove "<path_to_file_or_folder>" <username>
+```
+
+**Example:**
+
+```bash
+python acl_tool.py remove "C:\SensitiveData" Alice
+```
+
+---
+
+### `batch`
+
+Batch grant or remove access from multiple users using a `.json` or `.csv` file.
+
+```bash
+python acl_tool.py batch grant users.json
+python acl_tool.py batch remove users.csv
+```
+
+---
+
+### `view`
+
+View the access control list (ACL) for a file or folder.  
+If the resource already exists in the MongoDB database, its ACL will be updated; otherwise, a new record will be created.
+
+```bash
+python acl_tool.py view "<path_to_file_or_folder>"
+```
+
+**Example:**
+
+```bash
+python acl_tool.py view "C:\SensitiveData"
+```
+
+---
+
+## 📄 Sample JSON File for `batch` Command
+
+Here's an example of how your `users.json` file should look:
+
+```json
+[
+    {
+        "path": "C:\\test_acl\\test1.txt",
+        "user": "testuser",
+        "perm": "R"
+    },
+    {
+        "path": "C:\\test_acl\\test2.txt",
+        "user": "testuser",
+        "perm": "W"
+    },
+    {
+        "path": "C:\\test_acl\\test3.txt",
+        "user": "testuser",
+        "perm": "X"
+    }
+]
+```
+
+Where:
+- `"R"` = Read  
+- `"W"` = Write  
+- `"X"` = Execute  
+
+---
+
+## 📝 Logging
+
+All actions are automatically logged with timestamps and details.
+
+Logs are saved in a dedicated folder:
+
+```bash
+C:\Users\<YourUsername>\acl_tool_logs
+```
+
+Each session appends to a log file for easy auditing and traceability.
+
+---
+
+## 🧠 Cybersecurity Context
+
+Access control is a foundational cybersecurity practice. By tightly managing file and folder permissions, organizations can:
+
+- Reduce attack surfaces  
+- Minimize internal threat vectors  
+- Maintain compliance and data integrity  
+
+This project demonstrates how Python can be used for **security automation** and **system hardening** on Windows environments. It also integrates with **MongoDB** for centralized storage of access control metadata.
+
+---
+
+## 🧑‍💻 Author
+
+**Chineme**  
+Software Engineer & Cybersecurity Enthusiast  
+[GitHub](https://github.com/chineme123)
