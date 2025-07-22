@@ -56,24 +56,24 @@ def view_acl(path: str):
     result = subprocess.run(["icacls", path], capture_output=True, text=True)
     parsed_acl = parse_acl_output(result.stdout)
 
-    # Load existing JSON entries
-    data = []
-    if os.path.exists(log_file):
-        with open(log_file, "r") as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                data = []
+    # # Load existing JSON entries
+    # data = []
+    # if os.path.exists(log_file):
+    #     with open(log_file, "r") as f:
+    #         try:
+    #             data = json.load(f)
+    #         except json.JSONDecodeError:
+    #             data = []
 
-    # Remove any existing record with the same path
-    data = [entry for entry in data if entry.get["path"] != parsed_acl["path"]]
+    # # Remove any existing record with the same path
+    # data = [entry for entry in data if entry.get["path"] != parsed_acl["path"]]
 
-    # Append the new one
-    data.append(parsed_acl)
+    # # Append the new one
+    # data.append(parsed_acl)
 
-    # Write back to file
-    with open(log_file, "w") as f:
-        json.dump(data, f, indent=4)
+    # # Write back to file
+    # with open(log_file, "w") as f:
+    #     json.dump(data, f, indent=4)
 
     # Optional: Upsert into DB
     collection.replace_one({"path": parsed_acl["path"]}, parsed_acl, upsert=True)
